@@ -1,0 +1,222 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum TradeDirection {
+  LONG
+  SHORT
+}
+
+enum TradeGrade {
+  A_PLUS
+  A
+  B
+  C
+  FOMO
+}
+
+enum Emotion {
+  CALM
+  FOCUSED
+  EXCITED
+  FEARFUL
+  REVENGE
+  FOMO
+}
+
+enum MistakeType {
+  FOMO_ENTRY
+  REVENGE_TRADE
+  EARLY_EXIT
+  LATE_ENTRY
+  IGNORED_STOP_LOSS
+  OVER_TRADING
+  NO_MISTAKE
+}
+
+enum SetupType {
+  BREAKOUT
+  PULLBACK
+  VWAP_BOUNCE
+  REVERSAL
+  TREND_CONTINUATION
+  SUPPORT_RESISTANCE
+  ORB
+  SCALPING
+  CUSTOM
+}
+
+enum AiInsightType {
+  TRADE_REVIEW
+  PSYCHOLOGY_ANALYSIS
+  MISTAKE_DETECTION
+  WEEKLY_COACH
+}
+
+enum TradeSession {
+  ASIAN
+  LONDON
+  NEW_YORK
+  LONDON_NEW_YORK_OVERLAP
+}
+
+enum DayOfWeek {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  passwordHash  String
+  image         String?
+  emailVerified DateTime?
+  trades        Trade[]
+  playbooks     Playbook[]
+  aiInsights    AiInsight[]
+  accounts      Account[]
+  sessions      Session[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Trade {
+  id               String         @id @default(cuid())
+  userId           String
+  user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  date             DateTime
+  market           String?
+  instrument       String
+  direction        TradeDirection
+  session          TradeSession   @default(NEW_YORK)
+  dayOfWeek        DayOfWeek      @default(MONDAY)
+
+  entryPrice       Decimal        @db.Decimal(18, 8)
+  exitPrice        Decimal        @db.Decimal(18, 8)
+  stopLoss         Decimal?       @db.Decimal(18, 8)
+  target           Decimal?       @db.Decimal(18, 8)
+  quantity         Decimal        @db.Decimal(18, 8)
+  contractSize     Decimal        @db.Decimal(18, 8) @default(1)
+
+  risk             Decimal?       @db.Decimal(18, 8)
+  reward           Decimal?       @db.Decimal(18, 8)
+  rrRatio          Decimal?       @db.Decimal(10, 4)
+  pnl              Decimal        @db.Decimal(18, 8)
+
+  setup            SetupType
+  customSetup      String?
+  grade            TradeGrade
+
+  confidenceBefore Int
+  emotionBefore    Emotion
+  followedPlan     Boolean?
+  emotionAfter     Emotion?
+  confidenceAfter  Int?
+
+  mistakes         TradeMistake[]
+
+  tradeThesis      String?        @db.Text
+  whyEntered       String?        @db.Text
+  whatWentRight    String?        @db.Text
+  whatWentWrong    String?        @db.Text
+  lessonsLearned   String?        @db.Text
+
+  screenshotBefore String?
+  screenshotAfter  String?
+
+  aiReview         Json?
+  aiPsychologyNote Json?
+
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  @@index([userId, date])
+  @@index([userId, setup])
+  @@index([userId, instrument])
+  @@index([userId, session])
+  @@index([userId, dayOfWeek])
+}
+
+model TradeMistake {
+  tradeId  String
+  mistake  MistakeType
+  trade    Trade       @relation(fields: [tradeId], references: [id], onDelete: Cascade)
+
+  @@id([tradeId, mistake])
+}
+
+model Playbook {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name        String
+  description String?  @db.Text
+  conditions  String?  @db.Text
+  entryRules  String?  @db.Text
+  exitRules   String?  @db.Text
+  riskRules   String?  @db.Text
+  screenshot  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model AiInsight {
+  id        String        @id @default(cuid())
+  userId    String
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      AiInsightType
+  payload   Json
+  tradeId   String?
+  createdAt DateTime      @default(now())
+
+  @@index([userId, type])
+}
