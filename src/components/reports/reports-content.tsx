@@ -40,8 +40,12 @@ interface ExtendedReportData extends ReportData {
 }
 
 export function ReportsContent() {
-  const [weeklyReport, setWeeklyReport] = useState<ExtendedReportData | null>(null);
-  const [monthlyReport, setMonthlyReport] = useState<ExtendedReportData | null>(null);
+  const [weeklyReport, setWeeklyReport] = useState<ExtendedReportData | null>(
+    null,
+  );
+  const [monthlyReport, setMonthlyReport] = useState<ExtendedReportData | null>(
+    null,
+  );
   const [loading, setLoading] = useState({ weekly: false, monthly: false });
   const weeklyPrintRef = useRef<HTMLDivElement>(null);
   const monthlyPrintRef = useRef<HTMLDivElement>(null);
@@ -186,7 +190,9 @@ function ReportView({
             <p className="text-muted-foreground">{description}</p>
             <div className="flex items-center gap-2 mt-2 text-sm text-muted-foreground">
               <Calendar className="w-4 h-4" />
-              <span>{period === "weekly" ? "Last 7 days" : "Last 30 days"}</span>
+              <span>
+                {period === "weekly" ? "Last 7 days" : "Last 30 days"}
+              </span>
             </div>
           </div>
         </div>
@@ -298,7 +304,9 @@ function ReportPreview({ report, printRef, period }: ReportPreviewProps) {
           <MetricCard
             label="Streak"
             value={`${report.metrics?.currentStreak ?? 0} ${report.metrics?.streakType ?? ""}`}
-            icon={report.metrics?.streakType === "win" ? TrendingUp : TrendingDown}
+            icon={
+              report.metrics?.streakType === "win" ? TrendingUp : TrendingDown
+            }
             positive={report.metrics?.streakType === "win"}
           />
         </div>
@@ -319,7 +327,9 @@ function ReportPreview({ report, printRef, period }: ReportPreviewProps) {
             <div className="p-4 rounded-xl bg-success/10 border border-success/20">
               <div className="flex items-center gap-2 mb-2">
                 <Award className="w-5 h-5 text-success" />
-                <span className="text-sm font-medium text-success">Best Setup</span>
+                <span className="text-sm font-medium text-success">
+                  Best Setup
+                </span>
               </div>
               <p className="text-lg font-bold">{report.bestSetup.setup}</p>
               <p className="text-sm text-muted-foreground">
@@ -330,23 +340,24 @@ function ReportPreview({ report, printRef, period }: ReportPreviewProps) {
             </div>
           )}
 
-          {report.biggestMistake && report.biggestMistake.mistake !== "NO_MISTAKE" && (
-            <div className="p-4 rounded-xl bg-destructive/10 border border-destructive/20">
-              <div className="flex items-center gap-2 mb-2">
-                <AlertTriangle className="w-5 h-5 text-destructive" />
-                <span className="text-sm font-medium text-destructive">
-                  Biggest Mistake
-                </span>
+          {report.biggestMistake &&
+            report.biggestMistake.mistake !== "NO_MISTAKE" && (
+              <div className="p-4 rounded-xl bg-destructive/10 border border-destructive/20">
+                <div className="flex items-center gap-2 mb-2">
+                  <AlertTriangle className="w-5 h-5 text-destructive" />
+                  <span className="text-sm font-medium text-destructive">
+                    Biggest Mistake
+                  </span>
+                </div>
+                <p className="text-lg font-bold">
+                  {formatMistake(report.biggestMistake.mistake)}
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  {report.biggestMistake.count} occurrences •{" "}
+                  {formatCurrency(report.biggestMistake.totalLoss)} lost
+                </p>
               </div>
-              <p className="text-lg font-bold">
-                {formatMistake(report.biggestMistake.mistake)}
-              </p>
-              <p className="text-sm text-muted-foreground">
-                {report.biggestMistake.count} occurrences •{" "}
-                {formatCurrency(report.biggestMistake.totalLoss)} lost
-              </p>
-            </div>
-          )}
+            )}
         </div>
 
         {/* Best Session and Day */}
@@ -355,7 +366,9 @@ function ReportPreview({ report, printRef, period }: ReportPreviewProps) {
             <div className="p-4 rounded-xl bg-accent/10 border border-accent/20">
               <div className="flex items-center gap-2 mb-2">
                 <Clock className="w-5 h-5 text-accent" />
-                <span className="text-sm font-medium text-accent">Best Session</span>
+                <span className="text-sm font-medium text-accent">
+                  Best Session
+                </span>
               </div>
               <p className="text-lg font-bold">{report.bestSession.session}</p>
               <p className="text-sm text-muted-foreground">
@@ -369,7 +382,9 @@ function ReportPreview({ report, printRef, period }: ReportPreviewProps) {
             <div className="p-4 rounded-xl bg-primary/10 border border-primary/20">
               <div className="flex items-center gap-2 mb-2">
                 <Calendar className="w-5 h-5 text-primary" />
-                <span className="text-sm font-medium text-primary">Best Day</span>
+                <span className="text-sm font-medium text-primary">
+                  Best Day
+                </span>
               </div>
               <p className="text-lg font-bold">{report.bestDay.day}</p>
               <p className="text-sm text-muted-foreground">
@@ -413,13 +428,15 @@ function MetricCard({
     <div className="metric-card p-4 rounded-xl bg-surface/50 border border-border">
       <div className="flex items-center gap-2 mb-1">
         <Icon className="w-4 h-4 text-muted-foreground" />
-        <span className="metric-label text-xs text-muted-foreground">{label}</span>
+        <span className="metric-label text-xs text-muted-foreground">
+          {label}
+        </span>
       </div>
       <p
         className={cn(
           "metric-value text-xl font-bold",
           positive === true && "text-success positive",
-          positive === false && "text-destructive negative"
+          positive === false && "text-destructive negative",
         )}
       >
         {value}
@@ -447,7 +464,7 @@ function TradeCard({
         "trade-card p-4 rounded-xl border",
         isBest
           ? "bg-success/5 border-success/20"
-          : "bg-destructive/5 border-destructive/20"
+          : "bg-destructive/5 border-destructive/20",
       )}
     >
       <div className="flex items-center gap-2 mb-2">
@@ -459,7 +476,7 @@ function TradeCard({
         <span
           className={cn(
             "text-sm font-medium",
-            isBest ? "text-success" : "text-destructive"
+            isBest ? "text-success" : "text-destructive",
           )}
         >
           {type}
@@ -476,7 +493,7 @@ function TradeCard({
       <p
         className={cn(
           "text-xl font-bold mt-2",
-          pnl >= 0 ? "text-success" : "text-destructive"
+          pnl >= 0 ? "text-success" : "text-destructive",
         )}
       >
         {formatCurrency(pnl)}
@@ -499,7 +516,12 @@ function InsightCard({ insight }: { insight: Insight }) {
   };
 
   return (
-    <div className={cn("insight-card p-4 rounded-xl border", bgColors[insight.severity])}>
+    <div
+      className={cn(
+        "insight-card p-4 rounded-xl border",
+        bgColors[insight.severity],
+      )}
+    >
       <p className={cn("font-medium", textColors[insight.severity])}>
         {insight.headline}
       </p>

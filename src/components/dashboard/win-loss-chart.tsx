@@ -2,7 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
-import { ChartTooltip, chartTooltipCursor } from "@/components/shared/recharts-tooltip";
+import {
+  ChartTooltip,
+  chartTooltipCursor,
+} from "@/components/shared/recharts-tooltip";
 import type { WinLossData } from "@/types";
 import { useTradeModalStore } from "@/stores/trade-modal-store";
 
@@ -61,10 +64,7 @@ export function WinLossChart() {
               <Cell key={`cell-${index}`} fill={entry.color} />
             ))}
           </Pie>
-          <Tooltip
-            content={<ChartTooltip />}
-            cursor={chartTooltipCursor}
-          />
+          <Tooltip content={<ChartTooltip />} cursor={chartTooltipCursor} />
         </PieChart>
       </ResponsiveContainer>
       <div className="absolute inset-0 flex items-center justify-center">

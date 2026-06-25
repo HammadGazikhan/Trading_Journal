@@ -2,8 +2,22 @@
 
 import { useState } from "react";
 import { useSession, signOut } from "next-auth/react";
-import { User, Bell, Keyboard, Shield, Loader2, CheckCircle, XCircle, LogOut } from "lucide-react";
-import { GlassCard, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import {
+  User,
+  Bell,
+  Keyboard,
+  Shield,
+  Loader2,
+  CheckCircle,
+  XCircle,
+  LogOut,
+} from "lucide-react";
+import {
+  GlassCard,
+  CardHeader,
+  CardTitle,
+  CardContent,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -42,13 +56,22 @@ export function SettingsContent() {
 
       if (response.ok) {
         await updateSession({ name: profileName.trim() });
-        setProfileFeedback({ type: "success", message: "Profile updated successfully" });
+        setProfileFeedback({
+          type: "success",
+          message: "Profile updated successfully",
+        });
       } else {
         const data = await response.json();
-        setProfileFeedback({ type: "error", message: data.error || "Failed to update profile" });
+        setProfileFeedback({
+          type: "error",
+          message: data.error || "Failed to update profile",
+        });
       }
     } catch {
-      setProfileFeedback({ type: "error", message: "Failed to update profile" });
+      setProfileFeedback({
+        type: "error",
+        message: "Failed to update profile",
+      });
     } finally {
       setProfileSaving(false);
     }
@@ -56,11 +79,17 @@ export function SettingsContent() {
 
   const handlePasswordUpdate = async () => {
     if (!currentPassword) {
-      setPasswordFeedback({ type: "error", message: "Current password is required" });
+      setPasswordFeedback({
+        type: "error",
+        message: "Current password is required",
+      });
       return;
     }
     if (newPassword.length < 8) {
-      setPasswordFeedback({ type: "error", message: "Password must be at least 8 characters" });
+      setPasswordFeedback({
+        type: "error",
+        message: "Password must be at least 8 characters",
+      });
       return;
     }
     if (newPassword !== confirmPassword) {
@@ -79,16 +108,25 @@ export function SettingsContent() {
       });
 
       if (response.ok) {
-        setPasswordFeedback({ type: "success", message: "Password updated successfully" });
+        setPasswordFeedback({
+          type: "success",
+          message: "Password updated successfully",
+        });
         setCurrentPassword("");
         setNewPassword("");
         setConfirmPassword("");
       } else {
         const data = await response.json();
-        setPasswordFeedback({ type: "error", message: data.error || "Failed to update password" });
+        setPasswordFeedback({
+          type: "error",
+          message: data.error || "Failed to update password",
+        });
       }
     } catch {
-      setPasswordFeedback({ type: "error", message: "Failed to update password" });
+      setPasswordFeedback({
+        type: "error",
+        message: "Failed to update password",
+      });
     } finally {
       setPasswordSaving(false);
     }
@@ -129,9 +167,16 @@ export function SettingsContent() {
             </div>
           </div>
           {profileFeedback && (
-            <FeedbackMessage type={profileFeedback.type} message={profileFeedback.message} />
+            <FeedbackMessage
+              type={profileFeedback.type}
+              message={profileFeedback.message}
+            />
           )}
-          <Button onClick={handleProfileSave} disabled={profileSaving} className="gap-2">
+          <Button
+            onClick={handleProfileSave}
+            disabled={profileSaving}
+            className="gap-2"
+          >
             {profileSaving && <Loader2 className="w-4 h-4 animate-spin" />}
             Save Changes
           </Button>
@@ -219,9 +264,16 @@ export function SettingsContent() {
             </div>
           </div>
           {passwordFeedback && (
-            <FeedbackMessage type={passwordFeedback.type} message={passwordFeedback.message} />
+            <FeedbackMessage
+              type={passwordFeedback.type}
+              message={passwordFeedback.message}
+            />
           )}
-          <Button onClick={handlePasswordUpdate} disabled={passwordSaving} className="gap-2">
+          <Button
+            onClick={handlePasswordUpdate}
+            disabled={passwordSaving}
+            className="gap-2"
+          >
             {passwordSaving && <Loader2 className="w-4 h-4 animate-spin" />}
             Update Password
           </Button>
@@ -273,12 +325,20 @@ function ShortcutItem({
   );
 }
 
-function FeedbackMessage({ type, message }: { type: "success" | "error"; message: string }) {
+function FeedbackMessage({
+  type,
+  message,
+}: {
+  type: "success" | "error";
+  message: string;
+}) {
   return (
     <div
       className={cn(
         "flex items-center gap-2 p-3 rounded-lg text-sm",
-        type === "success" ? "bg-success/10 text-success" : "bg-destructive/10 text-destructive"
+        type === "success"
+          ? "bg-success/10 text-success"
+          : "bg-destructive/10 text-destructive",
       )}
     >
       {type === "success" ? (

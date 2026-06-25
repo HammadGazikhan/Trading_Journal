@@ -1,12 +1,25 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Brain, Smile, Frown, Meh, CheckCircle, XCircle, Target } from "lucide-react";
+import {
+  Brain,
+  Smile,
+  Frown,
+  Meh,
+  CheckCircle,
+  XCircle,
+  Target,
+} from "lucide-react";
 import { ChartCard } from "@/components/shared/chart-card";
 import { EmptyState } from "@/components/shared/empty-state";
 import { GlassCard } from "@/components/ui/card";
 import { useTradeModalStore } from "@/stores/trade-modal-store";
-import type { EmotionPerformance, Insight, ConfidencePerformance, FollowedPlanImpact } from "@/types";
+import type {
+  EmotionPerformance,
+  Insight,
+  ConfidencePerformance,
+  FollowedPlanImpact,
+} from "@/types";
 import {
   BarChart,
   Bar,
@@ -20,7 +33,10 @@ import {
   CartesianGrid,
 } from "recharts";
 import { formatCurrency } from "@/lib/utils";
-import { ChartTooltip, chartTooltipCursor } from "@/components/shared/recharts-tooltip";
+import {
+  ChartTooltip,
+  chartTooltipCursor,
+} from "@/components/shared/recharts-tooltip";
 
 interface PsychologyData {
   emotionData: EmotionPerformance[];
@@ -38,16 +54,21 @@ export function PsychologyContent() {
     async function fetchData() {
       setLoading(true);
       try {
-        const [emotionRes, confidenceRes, followedPlanRes, insightRes] = await Promise.all([
-          fetch("/api/analytics?metric=emotionPerformance"),
-          fetch("/api/analytics?metric=confidencePerformance"),
-          fetch("/api/analytics?metric=followedPlanImpact"),
-          fetch("/api/analytics?metric=insights"),
-        ]);
-        
+        const [emotionRes, confidenceRes, followedPlanRes, insightRes] =
+          await Promise.all([
+            fetch("/api/analytics?metric=emotionPerformance"),
+            fetch("/api/analytics?metric=confidencePerformance"),
+            fetch("/api/analytics?metric=followedPlanImpact"),
+            fetch("/api/analytics?metric=insights"),
+          ]);
+
         const emotionData = emotionRes.ok ? await emotionRes.json() : [];
-        const confidenceData = confidenceRes.ok ? await confidenceRes.json() : [];
-        const followedPlanData = followedPlanRes.ok ? await followedPlanRes.json() : [];
+        const confidenceData = confidenceRes.ok
+          ? await confidenceRes.json()
+          : [];
+        const followedPlanData = followedPlanRes.ok
+          ? await followedPlanRes.json()
+          : [];
         const insights = insightRes.ok ? await insightRes.json() : [];
 
         setData({ emotionData, confidenceData, followedPlanData, insights });
@@ -111,15 +132,20 @@ export function PsychologyContent() {
                 <Smile className="w-6 h-6 text-success" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Best Emotional State</p>
+                <p className="text-sm text-muted-foreground">
+                  Best Emotional State
+                </p>
                 <h3 className="text-xl font-semibold">
-                  {bestEmotion.emotion.charAt(0) + bestEmotion.emotion.slice(1).toLowerCase()}
+                  {bestEmotion.emotion.charAt(0) +
+                    bestEmotion.emotion.slice(1).toLowerCase()}
                 </h3>
               </div>
             </div>
             <div className="grid grid-cols-3 gap-4">
               <div>
-                <p className="text-2xl font-bold text-success">{bestEmotion.winRate.toFixed(1)}%</p>
+                <p className="text-2xl font-bold text-success">
+                  {bestEmotion.winRate.toFixed(1)}%
+                </p>
                 <p className="text-xs text-muted-foreground">Win Rate</p>
               </div>
               <div>
@@ -127,7 +153,9 @@ export function PsychologyContent() {
                 <p className="text-xs text-muted-foreground">Trades</p>
               </div>
               <div>
-                <p className={`text-2xl font-bold ${bestEmotion.avgPnl >= 0 ? "text-success" : "text-destructive"}`}>
+                <p
+                  className={`text-2xl font-bold ${bestEmotion.avgPnl >= 0 ? "text-success" : "text-destructive"}`}
+                >
                   {formatCurrency(bestEmotion.avgPnl)}
                 </p>
                 <p className="text-xs text-muted-foreground">Avg P&L</p>
@@ -135,7 +163,7 @@ export function PsychologyContent() {
             </div>
           </GlassCard>
         )}
-        
+
         {worstEmotion && worstEmotion !== bestEmotion && (
           <GlassCard className="p-6 border border-destructive/20 bg-destructive/5">
             <div className="flex items-center gap-3 mb-4">
@@ -143,15 +171,20 @@ export function PsychologyContent() {
                 <Frown className="w-6 h-6 text-destructive" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Worst Emotional State</p>
+                <p className="text-sm text-muted-foreground">
+                  Worst Emotional State
+                </p>
                 <h3 className="text-xl font-semibold">
-                  {worstEmotion.emotion.charAt(0) + worstEmotion.emotion.slice(1).toLowerCase()}
+                  {worstEmotion.emotion.charAt(0) +
+                    worstEmotion.emotion.slice(1).toLowerCase()}
                 </h3>
               </div>
             </div>
             <div className="grid grid-cols-3 gap-4">
               <div>
-                <p className="text-2xl font-bold text-destructive">{worstEmotion.winRate.toFixed(1)}%</p>
+                <p className="text-2xl font-bold text-destructive">
+                  {worstEmotion.winRate.toFixed(1)}%
+                </p>
                 <p className="text-xs text-muted-foreground">Win Rate</p>
               </div>
               <div>
@@ -159,7 +192,9 @@ export function PsychologyContent() {
                 <p className="text-xs text-muted-foreground">Trades</p>
               </div>
               <div>
-                <p className={`text-2xl font-bold ${worstEmotion.avgPnl >= 0 ? "text-success" : "text-destructive"}`}>
+                <p
+                  className={`text-2xl font-bold ${worstEmotion.avgPnl >= 0 ? "text-success" : "text-destructive"}`}
+                >
                   {formatCurrency(worstEmotion.avgPnl)}
                 </p>
                 <p className="text-xs text-muted-foreground">Avg P&L</p>
@@ -179,7 +214,10 @@ export function PsychologyContent() {
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={emotionData} layout="vertical">
-                <CartesianGrid stroke="rgba(148, 163, 184, 0.12)" horizontal={false} />
+                <CartesianGrid
+                  stroke="rgba(148, 163, 184, 0.12)"
+                  horizontal={false}
+                />
                 <XAxis
                   type="number"
                   axisLine={false}
@@ -202,7 +240,10 @@ export function PsychologyContent() {
                 <Tooltip
                   content={
                     <ChartTooltip
-                      formatter={(value) => [`${value.toFixed(1)}%`, "Win Rate"]}
+                      formatter={(value) => [
+                        `${value.toFixed(1)}%`,
+                        "Win Rate",
+                      ]}
                     />
                   }
                   cursor={chartTooltipCursor}
@@ -230,12 +271,21 @@ export function PsychologyContent() {
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={confidenceData}>
                   <defs>
-                    <linearGradient id="confidenceGradient" x1="0" y1="0" x2="0" y2="1">
+                    <linearGradient
+                      id="confidenceGradient"
+                      x1="0"
+                      y1="0"
+                      x2="0"
+                      y2="1"
+                    >
                       <stop offset="5%" stopColor="#00E5FF" stopOpacity={0.3} />
                       <stop offset="95%" stopColor="#00E5FF" stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid stroke="rgba(148, 163, 184, 0.12)" vertical={false} />
+                  <CartesianGrid
+                    stroke="rgba(148, 163, 184, 0.12)"
+                    vertical={false}
+                  />
                   <XAxis
                     dataKey="confidence"
                     axisLine={false}
@@ -288,12 +338,20 @@ export function PsychologyContent() {
                 <CheckCircle className="w-7 h-7 text-success" />
               </div>
               <div className="flex-1">
-                <p className="text-sm text-muted-foreground mb-1">Followed Plan</p>
+                <p className="text-sm text-muted-foreground mb-1">
+                  Followed Plan
+                </p>
                 <div className="flex items-baseline gap-3">
-                  <p className="text-3xl font-bold text-success">{followedTrue.winRate.toFixed(1)}%</p>
-                  <p className="text-sm text-muted-foreground">{followedTrue.trades} trades</p>
+                  <p className="text-3xl font-bold text-success">
+                    {followedTrue.winRate.toFixed(1)}%
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {followedTrue.trades} trades
+                  </p>
                 </div>
-                <p className={`text-sm ${followedTrue.avgPnl >= 0 ? "text-success" : "text-destructive"}`}>
+                <p
+                  className={`text-sm ${followedTrue.avgPnl >= 0 ? "text-success" : "text-destructive"}`}
+                >
                   Avg: {formatCurrency(followedTrue.avgPnl)}
                 </p>
               </div>
@@ -304,12 +362,20 @@ export function PsychologyContent() {
                 <XCircle className="w-7 h-7 text-destructive" />
               </div>
               <div className="flex-1">
-                <p className="text-sm text-muted-foreground mb-1">Deviated from Plan</p>
+                <p className="text-sm text-muted-foreground mb-1">
+                  Deviated from Plan
+                </p>
                 <div className="flex items-baseline gap-3">
-                  <p className="text-3xl font-bold text-destructive">{followedFalse.winRate.toFixed(1)}%</p>
-                  <p className="text-sm text-muted-foreground">{followedFalse.trades} trades</p>
+                  <p className="text-3xl font-bold text-destructive">
+                    {followedFalse.winRate.toFixed(1)}%
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {followedFalse.trades} trades
+                  </p>
                 </div>
-                <p className={`text-sm ${followedFalse.avgPnl >= 0 ? "text-success" : "text-destructive"}`}>
+                <p
+                  className={`text-sm ${followedFalse.avgPnl >= 0 ? "text-success" : "text-destructive"}`}
+                >
                   Avg: {formatCurrency(followedFalse.avgPnl)}
                 </p>
               </div>
@@ -332,7 +398,8 @@ export function PsychologyContent() {
               )}
               <div>
                 <h3 className="font-semibold">
-                  {emotion.emotion.charAt(0) + emotion.emotion.slice(1).toLowerCase()}
+                  {emotion.emotion.charAt(0) +
+                    emotion.emotion.slice(1).toLowerCase()}
                 </h3>
                 <p className="text-sm text-muted-foreground">
                   {emotion.trades} trades
@@ -341,11 +408,15 @@ export function PsychologyContent() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <p className="text-2xl font-bold">{emotion.winRate.toFixed(1)}%</p>
+                <p className="text-2xl font-bold">
+                  {emotion.winRate.toFixed(1)}%
+                </p>
                 <p className="text-xs text-muted-foreground">Win Rate</p>
               </div>
               <div>
-                <p className={`text-2xl font-bold ${emotion.avgPnl >= 0 ? "text-success" : "text-destructive"}`}>
+                <p
+                  className={`text-2xl font-bold ${emotion.avgPnl >= 0 ? "text-success" : "text-destructive"}`}
+                >
                   {formatCurrency(emotion.avgPnl)}
                 </p>
                 <p className="text-xs text-muted-foreground">Avg P&L</p>
@@ -387,7 +458,9 @@ function InsightCard({ insight }: { insight: Insight }) {
         <div>
           <p className="font-medium mb-1">{insight.headline}</p>
           <p className="text-2xl font-bold mb-2">{insight.stat}</p>
-          <p className="text-sm text-muted-foreground">{insight.recommendation}</p>
+          <p className="text-sm text-muted-foreground">
+            {insight.recommendation}
+          </p>
         </div>
       </div>
     </GlassCard>

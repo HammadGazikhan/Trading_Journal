@@ -120,7 +120,10 @@ export function PlaybookModal({
       });
 
       if (!response.ok) {
-        throw new Error("Upload failed");
+        const body = (await response.json().catch(() => null)) as {
+          error?: string;
+        } | null;
+        throw new Error(body?.error ?? "Upload failed");
       }
 
       const { url } = (await response.json()) as { url: string };
@@ -130,7 +133,11 @@ export function PlaybookModal({
       });
     } catch (error) {
       console.error("Failed to upload screenshot:", error);
-      setUploadError("Screenshot upload failed. Please try again.");
+      setUploadError(
+        error instanceof Error
+          ? error.message
+          : "Screenshot upload failed. Please try again.",
+      );
     } finally {
       setUploading(false);
     }
@@ -196,7 +203,9 @@ export function PlaybookModal({
                     {...register("name")}
                   />
                   {errors.name && (
-                    <p className="text-xs text-destructive">{errors.name.message}</p>
+                    <p className="text-xs text-destructive">
+                      {errors.name.message}
+                    </p>
                   )}
                 </div>
 
@@ -256,7 +265,7 @@ export function PlaybookModal({
                     htmlFor="playbook-screenshot"
                     className={cn(
                       "group flex min-h-[180px] cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-white/10 bg-surface/50 p-4 text-center transition-colors",
-                      "hover:border-primary/40 hover:bg-surface"
+                      "hover:border-primary/40 hover:bg-surface",
                     )}
                     onDragOver={(e) => e.preventDefault()}
                     onDrop={(e) => {

@@ -3,7 +3,11 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { formatDate, formatCurrency, formatSetup, formatRR } from "@/lib/utils";
-import { DirectionBadge, GradeBadge, PnLBadge } from "@/components/shared/badge";
+import {
+  DirectionBadge,
+  GradeBadge,
+  PnLBadge,
+} from "@/components/shared/badge";
 import { useTradeModalStore } from "@/stores/trade-modal-store";
 import type { TradeWithMistakes } from "@/types";
 

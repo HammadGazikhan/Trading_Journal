@@ -86,7 +86,10 @@ export function DailyPnLChart() {
               formatCurrency(value, { notation: "compact" })
             }
           />
-          <Tooltip content={<DailyPnLTooltip />} cursor={{ fill: "rgba(255,255,255,0.05)" }} />
+          <Tooltip
+            content={<DailyPnLTooltip />}
+            cursor={{ fill: "rgba(255,255,255,0.05)" }}
+          />
           <Bar dataKey="pnl" radius={[4, 4, 0, 0]} animationDuration={1000}>
             {data.map((entry, index) => (
               <Cell

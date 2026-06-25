@@ -1,7 +1,14 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { Plus, BookMarked, Edit, Trash2, ChevronDown, ChevronUp } from "lucide-react";
+import {
+  Plus,
+  BookMarked,
+  Edit,
+  Trash2,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { GlassCard } from "@/components/ui/card";
 import { EmptyState } from "@/components/shared/empty-state";
@@ -35,7 +42,7 @@ export function PlaybookContent() {
 
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this playbook?")) return;
-    
+
     try {
       const response = await fetch(`/api/playbook/${id}`, { method: "DELETE" });
       if (response.ok) {
@@ -105,8 +112,9 @@ export function PlaybookContent() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {playbooks.map((playbook) => {
           const isExpanded = expandedId === playbook.id;
-          const hasMoreContent = playbook.exitRules || playbook.riskRules || playbook.screenshot;
-          
+          const hasMoreContent =
+            playbook.exitRules || playbook.riskRules || playbook.screenshot;
+
           return (
             <GlassCard key={playbook.id} className="p-6 flex flex-col">
               <div className="flex items-start justify-between mb-4">
@@ -148,7 +156,9 @@ export function PlaybookContent() {
                     <p className="text-xs font-medium text-muted-foreground mb-1">
                       Conditions
                     </p>
-                    <p className="text-sm line-clamp-2">{playbook.conditions}</p>
+                    <p className="text-sm line-clamp-2">
+                      {playbook.conditions}
+                    </p>
                   </div>
                 )}
                 {playbook.entryRules && (
@@ -156,7 +166,9 @@ export function PlaybookContent() {
                     <p className="text-xs font-medium text-muted-foreground mb-1">
                       Entry Rules
                     </p>
-                    <p className="text-sm line-clamp-2">{playbook.entryRules}</p>
+                    <p className="text-sm line-clamp-2">
+                      {playbook.entryRules}
+                    </p>
                   </div>
                 )}
 

@@ -102,9 +102,21 @@ export function DashboardContent() {
           title="Current Streak"
           value={metrics.currentStreak}
           format="number"
-          suffix={metrics.streakType === "win" ? " wins" : metrics.streakType === "loss" ? " losses" : ""}
+          suffix={
+            metrics.streakType === "win"
+              ? " wins"
+              : metrics.streakType === "loss"
+                ? " losses"
+                : ""
+          }
           icon={Zap}
-          trend={metrics.streakType === "win" ? "positive" : metrics.streakType === "loss" ? "negative" : "neutral"}
+          trend={
+            metrics.streakType === "win"
+              ? "positive"
+              : metrics.streakType === "loss"
+                ? "negative"
+                : "neutral"
+          }
         />
       </div>
 

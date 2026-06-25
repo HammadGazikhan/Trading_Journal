@@ -1,7 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { ChevronLeft, ChevronRight, MoreHorizontal, Trash2, Edit } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  MoreHorizontal,
+  Trash2,
+  Edit,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { GlassCard } from "@/components/ui/card";
 import {
@@ -11,8 +17,20 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/shared/loading-skeleton";
-import { DirectionBadge, GradeBadge, PnLBadge, EmotionBadge, SessionBadge } from "@/components/shared/badge";
-import { formatDate, formatCurrency, formatSetup, formatRR, formatDayOfWeek } from "@/lib/utils";
+import {
+  DirectionBadge,
+  GradeBadge,
+  PnLBadge,
+  EmotionBadge,
+  SessionBadge,
+} from "@/components/shared/badge";
+import {
+  formatDate,
+  formatCurrency,
+  formatSetup,
+  formatRR,
+  formatDayOfWeek,
+} from "@/lib/utils";
 import { useTradeModalStore } from "@/stores/trade-modal-store";
 import type { TradeWithMistakes } from "@/types";
 
@@ -40,7 +58,7 @@ export function TradesTable({
 
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this trade?")) return;
-    
+
     try {
       const response = await fetch(`/api/trades/${id}`, { method: "DELETE" });
       if (response.ok) {
@@ -55,7 +73,10 @@ export function TradesTable({
     return (
       <GlassCard className="overflow-hidden">
         {Array.from({ length: 5 }).map((_, i) => (
-          <div key={i} className="flex items-center gap-4 p-4 border-b border-border">
+          <div
+            key={i}
+            className="flex items-center gap-4 p-4 border-b border-border"
+          >
             <Skeleton className="h-4 w-24" />
             <Skeleton className="h-4 w-16" />
             <Skeleton className="h-4 w-20" />
@@ -176,8 +197,8 @@ export function TradesTable({
       {totalPages > 1 && (
         <div className="flex items-center justify-between px-4 py-3 border-t border-border">
           <div className="text-sm text-muted-foreground">
-            Showing {(page - 1) * limit + 1} to {Math.min(page * limit, total)} of{" "}
-            {total} trades
+            Showing {(page - 1) * limit + 1} to {Math.min(page * limit, total)}{" "}
+            of {total} trades
           </div>
           <div className="flex items-center gap-2">
             <Button

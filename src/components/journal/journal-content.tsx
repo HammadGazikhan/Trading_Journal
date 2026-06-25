@@ -33,7 +33,7 @@ export function JournalContent() {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState(
-    searchParams.get("search") || ""
+    searchParams.get("search") || "",
   );
   const [sessionFilter, setSessionFilter] = useState<string>("");
   const [dayFilter, setDayFilter] = useState<string>("");
@@ -45,7 +45,8 @@ export function JournalContent() {
       params.set("page", page.toString());
       params.set("limit", "20");
       if (searchQuery) params.set("search", searchQuery);
-      if (sessionFilter && sessionFilter !== "ALL") params.set("session", sessionFilter);
+      if (sessionFilter && sessionFilter !== "ALL")
+        params.set("session", sessionFilter);
       if (dayFilter && dayFilter !== "ALL") params.set("dayOfWeek", dayFilter);
 
       const response = await fetch(`/api/trades?${params}`);
@@ -67,7 +68,10 @@ export function JournalContent() {
     setSearchQuery("");
   };
 
-  const hasFilters = (sessionFilter && sessionFilter !== "ALL") || (dayFilter && dayFilter !== "ALL") || searchQuery;
+  const hasFilters =
+    (sessionFilter && sessionFilter !== "ALL") ||
+    (dayFilter && dayFilter !== "ALL") ||
+    searchQuery;
 
   useEffect(() => {
     fetchTrades();
@@ -110,87 +114,87 @@ export function JournalContent() {
 
   return (
     <div className="space-y-4">
-        {/* Toolbar */}
-        <div className="flex flex-col gap-4">
-          <div className="flex flex-col sm:flex-row gap-4 justify-between">
-            <form onSubmit={handleSearch} className="flex gap-2 flex-1 max-w-md">
-              <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input
-                  placeholder="Search by instrument..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-              <Button type="submit" variant="secondary">
-                Search
-              </Button>
-            </form>
-            <div className="flex gap-2">
-              <Button variant="outline" className="gap-2" onClick={handleExport}>
-                <Download className="w-4 h-4" />
-                Export
-              </Button>
-              <Button className="gap-2" onClick={() => openModal()}>
-                <Plus className="w-4 h-4" />
-                Add Trade
-              </Button>
+      {/* Toolbar */}
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col sm:flex-row gap-4 justify-between">
+          <form onSubmit={handleSearch} className="flex gap-2 flex-1 max-w-md">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search by instrument..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10"
+              />
             </div>
-          </div>
-
-          {/* Filters */}
-          <div className="flex flex-wrap gap-3 items-center">
-            <Select value={sessionFilter} onValueChange={setSessionFilter}>
-              <SelectTrigger className="w-[160px]">
-                <SelectValue placeholder="All Sessions" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="ALL">All Sessions</SelectItem>
-                {TRADE_SESSIONS.map((s) => (
-                  <SelectItem key={s.value} value={s.value}>
-                    {s.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            <Select value={dayFilter} onValueChange={setDayFilter}>
-              <SelectTrigger className="w-[160px]">
-                <SelectValue placeholder="All Days" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="ALL">All Days</SelectItem>
-                {DAYS_OF_WEEK.map((d) => (
-                  <SelectItem key={d.value} value={d.value}>
-                    {d.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            {hasFilters && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={clearFilters}
-                className="h-9 gap-1 text-muted-foreground"
-              >
-                <X className="w-3 h-3" />
-                Clear filters
-              </Button>
-            )}
+            <Button type="submit" variant="secondary">
+              Search
+            </Button>
+          </form>
+          <div className="flex gap-2">
+            <Button variant="outline" className="gap-2" onClick={handleExport}>
+              <Download className="w-4 h-4" />
+              Export
+            </Button>
+            <Button className="gap-2" onClick={() => openModal()}>
+              <Plus className="w-4 h-4" />
+              Add Trade
+            </Button>
           </div>
         </div>
 
-        {/* Table */}
-        <TradesTable
-          trades={trades}
-          loading={loading}
-          page={page}
-          total={total}
-          limit={20}
-          onPageChange={setPage}
+        {/* Filters */}
+        <div className="flex flex-wrap gap-3 items-center">
+          <Select value={sessionFilter} onValueChange={setSessionFilter}>
+            <SelectTrigger className="w-[160px]">
+              <SelectValue placeholder="All Sessions" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="ALL">All Sessions</SelectItem>
+              {TRADE_SESSIONS.map((s) => (
+                <SelectItem key={s.value} value={s.value}>
+                  {s.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <Select value={dayFilter} onValueChange={setDayFilter}>
+            <SelectTrigger className="w-[160px]">
+              <SelectValue placeholder="All Days" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="ALL">All Days</SelectItem>
+              {DAYS_OF_WEEK.map((d) => (
+                <SelectItem key={d.value} value={d.value}>
+                  {d.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          {hasFilters && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={clearFilters}
+              className="h-9 gap-1 text-muted-foreground"
+            >
+              <X className="w-3 h-3" />
+              Clear filters
+            </Button>
+          )}
+        </div>
+      </div>
+
+      {/* Table */}
+      <TradesTable
+        trades={trades}
+        loading={loading}
+        page={page}
+        total={total}
+        limit={20}
+        onPageChange={setPage}
         onRefresh={fetchTrades}
       />
     </div>

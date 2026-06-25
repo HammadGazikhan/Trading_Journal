@@ -11,7 +11,10 @@ import {
 } from "recharts";
 import type { EquityCurvePoint } from "@/types";
 import { formatCurrency } from "@/lib/utils";
-import { ChartTooltip, chartTooltipCursor } from "@/components/shared/recharts-tooltip";
+import {
+  ChartTooltip,
+  chartTooltipCursor,
+} from "@/components/shared/recharts-tooltip";
 import { useTradeModalStore } from "@/stores/trade-modal-store";
 
 export function EquityCurveChart() {
@@ -61,7 +64,9 @@ export function EquityCurveChart() {
             axisLine={false}
             tickLine={false}
             tick={{ fill: "#94A3B8", fontSize: 12 }}
-            tickFormatter={(value) => formatCurrency(value, { notation: "compact" })}
+            tickFormatter={(value) =>
+              formatCurrency(value, { notation: "compact" })
+            }
           />
           <Tooltip
             content={

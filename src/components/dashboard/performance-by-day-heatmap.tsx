@@ -52,10 +52,10 @@ export function PerformanceByDayHeatmap() {
     if (activeDays.length === 0) return null;
 
     const bestDay = activeDays.reduce((best, current) =>
-      current.pnl > best.pnl ? current : best
+      current.pnl > best.pnl ? current : best,
     );
     const toughestDay = activeDays.reduce((worst, current) =>
-      current.pnl < worst.pnl ? current : worst
+      current.pnl < worst.pnl ? current : worst,
     );
 
     return { bestDay, toughestDay };
@@ -83,7 +83,7 @@ export function PerformanceByDayHeatmap() {
                 key={day.day}
                 className={cn(
                   "flex min-w-0 flex-col items-center rounded-lg border border-white/5 px-1.5 py-2.5 text-center transition-transform duration-200",
-                  hasTrades && "hover:-translate-y-0.5"
+                  hasTrades && "hover:-translate-y-0.5",
                 )}
                 style={{ backgroundColor: getHeatColor(day, maxAbsPnl) }}
               >
@@ -103,7 +103,7 @@ export function PerformanceByDayHeatmap() {
                     <p
                       className={cn(
                         "mt-1.5 w-full truncate text-xs font-semibold font-mono leading-none",
-                        day.pnl >= 0 ? "text-success" : "text-destructive"
+                        day.pnl >= 0 ? "text-success" : "text-destructive",
                       )}
                       title={formatCurrency(day.pnl)}
                     >
@@ -129,7 +129,8 @@ export function PerformanceByDayHeatmap() {
               {summary.bestDay.day}
             </p>
             <p className="text-xs text-muted-foreground">
-              {formatCompactPnl(summary.bestDay.pnl)} · {summary.bestDay.trades} trades
+              {formatCompactPnl(summary.bestDay.pnl)} · {summary.bestDay.trades}{" "}
+              trades
             </p>
           </div>
           <div className="rounded-lg border border-destructive/20 bg-destructive/10 p-3">
@@ -140,7 +141,8 @@ export function PerformanceByDayHeatmap() {
               {summary.toughestDay.day}
             </p>
             <p className="text-xs text-muted-foreground">
-              {formatCompactPnl(summary.toughestDay.pnl)} · {summary.toughestDay.trades} trades
+              {formatCompactPnl(summary.toughestDay.pnl)} ·{" "}
+              {summary.toughestDay.trades} trades
             </p>
           </div>
         </div>

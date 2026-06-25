@@ -11,7 +11,10 @@ import {
 } from "recharts";
 import type { SetupPerformance } from "@/types";
 import { formatSetup } from "@/lib/utils";
-import { ChartTooltip, chartTooltipCursor } from "@/components/shared/recharts-tooltip";
+import {
+  ChartTooltip,
+  chartTooltipCursor,
+} from "@/components/shared/recharts-tooltip";
 import { useTradeModalStore } from "@/stores/trade-modal-store";
 
 export function SetupPerformanceChart() {

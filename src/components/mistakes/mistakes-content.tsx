@@ -17,9 +17,16 @@ import { EmptyState } from "@/components/shared/empty-state";
 import { GlassCard } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useTradeModalStore } from "@/stores/trade-modal-store";
-import type { MistakeAnalysis, MistakesOverTime, TradeByMistake } from "@/types";
+import type {
+  MistakeAnalysis,
+  MistakesOverTime,
+  TradeByMistake,
+} from "@/types";
 import { formatMistake, formatCurrency, cn } from "@/lib/utils";
-import { ChartTooltip, chartTooltipCursor } from "@/components/shared/recharts-tooltip";
+import {
+  ChartTooltip,
+  chartTooltipCursor,
+} from "@/components/shared/recharts-tooltip";
 import {
   BarChart,
   Bar,
@@ -74,7 +81,7 @@ export function MistakesContent() {
     setLoadingTrades(true);
     try {
       const response = await fetch(
-        `/api/analytics?metric=tradesByMistake&mistake=${encodeURIComponent(mistake)}`
+        `/api/analytics?metric=tradesByMistake&mistake=${encodeURIComponent(mistake)}`,
       );
       if (response.ok) {
         setMistakeTrades(await response.json());
@@ -93,7 +100,8 @@ export function MistakesContent() {
 
   if (loading) return null;
 
-  const filteredMistakes = data?.analysis.filter((m) => m.mistake !== "NO_MISTAKE") ?? [];
+  const filteredMistakes =
+    data?.analysis.filter((m) => m.mistake !== "NO_MISTAKE") ?? [];
 
   if (filteredMistakes.length === 0) {
     return (
@@ -110,11 +118,11 @@ export function MistakesContent() {
   const totalLoss = filteredMistakes.reduce((sum, m) => sum + m.totalLoss, 0);
   const worstMistake = filteredMistakes.reduce(
     (worst, m) => (m.totalLoss < worst.totalLoss ? m : worst),
-    filteredMistakes[0]
+    filteredMistakes[0],
   );
   const mostFrequent = filteredMistakes.reduce(
     (most, m) => (m.count > most.count ? m : most),
-    filteredMistakes[0]
+    filteredMistakes[0],
   );
 
   const chartData = filteredMistakes
@@ -182,7 +190,10 @@ export function MistakesContent() {
                     <stop offset="95%" stopColor="#FF5252" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid stroke="rgba(148, 163, 184, 0.12)" vertical={false} />
+                <CartesianGrid
+                  stroke="rgba(148, 163, 184, 0.12)"
+                  vertical={false}
+                />
                 <XAxis
                   dataKey="period"
                   axisLine={false}
@@ -201,7 +212,9 @@ export function MistakesContent() {
                   axisLine={false}
                   tickLine={false}
                   tick={{ fill: "#94A3B8", fontSize: 12 }}
-                  tickFormatter={(value) => formatCurrency(Math.abs(value), { notation: "compact" })}
+                  tickFormatter={(value) =>
+                    formatCurrency(Math.abs(value), { notation: "compact" })
+                  }
                 />
                 <Tooltip
                   content={
@@ -245,7 +258,10 @@ export function MistakesContent() {
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData}>
-                <CartesianGrid stroke="rgba(148, 163, 184, 0.12)" vertical={false} />
+                <CartesianGrid
+                  stroke="rgba(148, 163, 184, 0.12)"
+                  vertical={false}
+                />
                 <XAxis
                   dataKey="mistake"
                   axisLine={false}
@@ -261,7 +277,11 @@ export function MistakesContent() {
                   tick={{ fill: "#94A3B8", fontSize: 12 }}
                 />
                 <Tooltip
-                  content={<ChartTooltip formatter={(value) => [String(value), "Mistakes"]} />}
+                  content={
+                    <ChartTooltip
+                      formatter={(value) => [String(value), "Mistakes"]}
+                    />
+                  }
                   cursor={chartTooltipCursor}
                 />
                 <Bar
@@ -270,7 +290,9 @@ export function MistakesContent() {
                   radius={[4, 4, 0, 0]}
                   animationDuration={1000}
                   cursor="pointer"
-                  onClick={(_, index) => handleMistakeClick(chartData[index].rawMistake)}
+                  onClick={(_, index) =>
+                    handleMistakeClick(chartData[index].rawMistake)
+                  }
                 />
               </BarChart>
             </ResponsiveContainer>
@@ -285,13 +307,18 @@ export function MistakesContent() {
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData} layout="vertical">
-                <CartesianGrid stroke="rgba(148, 163, 184, 0.12)" horizontal={false} />
+                <CartesianGrid
+                  stroke="rgba(148, 163, 184, 0.12)"
+                  horizontal={false}
+                />
                 <XAxis
                   type="number"
                   axisLine={false}
                   tickLine={false}
                   tick={{ fill: "#94A3B8", fontSize: 12 }}
-                  tickFormatter={(value) => formatCurrency(value, { notation: "compact" })}
+                  tickFormatter={(value) =>
+                    formatCurrency(value, { notation: "compact" })
+                  }
                 />
                 <YAxis
                   type="category"
@@ -315,7 +342,9 @@ export function MistakesContent() {
                   radius={[0, 4, 4, 0]}
                   animationDuration={1000}
                   cursor="pointer"
-                  onClick={(_, index) => handleMistakeClick(chartData[index].rawMistake)}
+                  onClick={(_, index) =>
+                    handleMistakeClick(chartData[index].rawMistake)
+                  }
                 />
               </BarChart>
             </ResponsiveContainer>
@@ -325,7 +354,9 @@ export function MistakesContent() {
 
       {/* Ranked Mistake List */}
       <GlassCard className="p-6">
-        <h3 className="text-lg font-semibold mb-4">Biggest Money-Losing Mistakes</h3>
+        <h3 className="text-lg font-semibold mb-4">
+          Biggest Money-Losing Mistakes
+        </h3>
         <div className="space-y-3">
           {filteredMistakes
             .sort((a, b) => a.totalLoss - b.totalLoss)
@@ -340,13 +371,15 @@ export function MistakesContent() {
                     "w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm",
                     index === 0
                       ? "bg-destructive/20 text-destructive"
-                      : "bg-muted text-muted-foreground"
+                      : "bg-muted text-muted-foreground",
                   )}
                 >
                   {index + 1}
                 </div>
                 <div className="flex-1">
-                  <p className="font-medium">{formatMistake(mistake.mistake)}</p>
+                  <p className="font-medium">
+                    {formatMistake(mistake.mistake)}
+                  </p>
                   <p className="text-sm text-muted-foreground">
                     {mistake.count} occurrence{mistake.count !== 1 ? "s" : ""}
                   </p>
@@ -389,8 +422,8 @@ export function MistakesContent() {
                     {formatMistake(selectedMistake)} Trades
                   </h2>
                   <p className="text-sm text-muted-foreground">
-                    {mistakeTrades.length} trade{mistakeTrades.length !== 1 ? "s" : ""} with
-                    this mistake
+                    {mistakeTrades.length} trade
+                    {mistakeTrades.length !== 1 ? "s" : ""} with this mistake
                   </p>
                 </div>
                 <Button
@@ -424,7 +457,7 @@ export function MistakesContent() {
                             "w-10 h-10 rounded-lg flex items-center justify-center",
                             trade.direction === "LONG"
                               ? "bg-success/20"
-                              : "bg-destructive/20"
+                              : "bg-destructive/20",
                           )}
                         >
                           {trade.direction === "LONG" ? (
@@ -447,7 +480,9 @@ export function MistakesContent() {
                           <p
                             className={cn(
                               "text-lg font-bold",
-                              trade.pnl >= 0 ? "text-success" : "text-destructive"
+                              trade.pnl >= 0
+                                ? "text-success"
+                                : "text-destructive",
                             )}
                           >
                             {formatCurrency(trade.pnl)}

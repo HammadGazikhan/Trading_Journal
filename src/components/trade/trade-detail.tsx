@@ -6,9 +6,20 @@ import { useRouter } from "next/navigation";
 import { ArrowLeft, Edit, Trash2, Loader2, ZoomIn } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { GlassCard, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import {
+  GlassCard,
+  CardHeader,
+  CardTitle,
+  CardContent,
+} from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { DirectionBadge, GradeBadge, EmotionBadge, PnLBadge, SessionBadge } from "@/components/shared/badge";
+import {
+  DirectionBadge,
+  GradeBadge,
+  EmotionBadge,
+  PnLBadge,
+  SessionBadge,
+} from "@/components/shared/badge";
 import { useTradeModalStore } from "@/stores/trade-modal-store";
 import {
   formatDateTime,
@@ -36,13 +47,19 @@ export function TradeDetail({ trade }: TradeDetailProps) {
   };
 
   const handleDelete = async () => {
-    if (!confirm("Are you sure you want to delete this trade? This action cannot be undone.")) {
+    if (
+      !confirm(
+        "Are you sure you want to delete this trade? This action cannot be undone.",
+      )
+    ) {
       return;
     }
 
     setDeleting(true);
     try {
-      const response = await fetch(`/api/trades/${trade.id}`, { method: "DELETE" });
+      const response = await fetch(`/api/trades/${trade.id}`, {
+        method: "DELETE",
+      });
       if (response.ok) {
         router.push("/journal");
       }
@@ -116,7 +133,9 @@ export function TradeDetail({ trade }: TradeDetailProps) {
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Day</p>
-                  <p className="text-lg font-medium">{formatDayOfWeek(trade.dayOfWeek)}</p>
+                  <p className="text-lg font-medium">
+                    {formatDayOfWeek(trade.dayOfWeek)}
+                  </p>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Setup</p>
@@ -128,7 +147,9 @@ export function TradeDetail({ trade }: TradeDetailProps) {
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Date</p>
-                  <p className="text-lg font-medium">{formatDateTime(trade.date)}</p>
+                  <p className="text-lg font-medium">
+                    {formatDateTime(trade.date)}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -143,30 +164,44 @@ export function TradeDetail({ trade }: TradeDetailProps) {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                 <div>
                   <p className="text-sm text-muted-foreground">Entry Price</p>
-                  <p className="text-lg font-mono">{formatCurrency(Number(trade.entryPrice))}</p>
+                  <p className="text-lg font-mono">
+                    {formatCurrency(Number(trade.entryPrice))}
+                  </p>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Exit Price</p>
-                  <p className="text-lg font-mono">{formatCurrency(Number(trade.exitPrice))}</p>
+                  <p className="text-lg font-mono">
+                    {formatCurrency(Number(trade.exitPrice))}
+                  </p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">Lots / Quantity</p>
-                  <p className="text-lg font-mono">{formatQuantity(Number(trade.quantity))}</p>
+                  <p className="text-sm text-muted-foreground">
+                    Lots / Quantity
+                  </p>
+                  <p className="text-lg font-mono">
+                    {formatQuantity(Number(trade.quantity))}
+                  </p>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Contract Size</p>
-                  <p className="text-lg font-mono">{Number(trade.contractSize).toLocaleString()}</p>
+                  <p className="text-lg font-mono">
+                    {Number(trade.contractSize).toLocaleString()}
+                  </p>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Stop Loss</p>
                   <p className="text-lg font-mono">
-                    {trade.stopLoss ? formatCurrency(Number(trade.stopLoss)) : "N/A"}
+                    {trade.stopLoss
+                      ? formatCurrency(Number(trade.stopLoss))
+                      : "N/A"}
                   </p>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Target</p>
                   <p className="text-lg font-mono">
-                    {trade.target ? formatCurrency(Number(trade.target)) : "N/A"}
+                    {trade.target
+                      ? formatCurrency(Number(trade.target))
+                      : "N/A"}
                   </p>
                 </div>
                 <div>
@@ -178,7 +213,9 @@ export function TradeDetail({ trade }: TradeDetailProps) {
                 <div>
                   <p className="text-sm text-muted-foreground">Reward</p>
                   <p className="text-lg font-mono text-success">
-                    {trade.reward ? formatCurrency(Number(trade.reward)) : "N/A"}
+                    {trade.reward
+                      ? formatCurrency(Number(trade.reward))
+                      : "N/A"}
                   </p>
                 </div>
                 <div>
@@ -197,7 +234,11 @@ export function TradeDetail({ trade }: TradeDetailProps) {
           </GlassCard>
 
           {/* Notes */}
-          {(trade.tradeThesis || trade.whyEntered || trade.whatWentRight || trade.whatWentWrong || trade.lessonsLearned) && (
+          {(trade.tradeThesis ||
+            trade.whyEntered ||
+            trade.whatWentRight ||
+            trade.whatWentWrong ||
+            trade.lessonsLearned) && (
             <GlassCard>
               <CardHeader>
                 <CardTitle>Notes</CardTitle>
@@ -205,31 +246,41 @@ export function TradeDetail({ trade }: TradeDetailProps) {
               <CardContent className="space-y-6">
                 {trade.tradeThesis && (
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground mb-2">Trade Thesis</p>
+                    <p className="text-sm font-medium text-muted-foreground mb-2">
+                      Trade Thesis
+                    </p>
                     <p className="text-foreground">{trade.tradeThesis}</p>
                   </div>
                 )}
                 {trade.whyEntered && (
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground mb-2">Why I Entered</p>
+                    <p className="text-sm font-medium text-muted-foreground mb-2">
+                      Why I Entered
+                    </p>
                     <p className="text-foreground">{trade.whyEntered}</p>
                   </div>
                 )}
                 {trade.whatWentRight && (
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground mb-2">What Went Right</p>
+                    <p className="text-sm font-medium text-muted-foreground mb-2">
+                      What Went Right
+                    </p>
                     <p className="text-foreground">{trade.whatWentRight}</p>
                   </div>
                 )}
                 {trade.whatWentWrong && (
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground mb-2">What Went Wrong</p>
+                    <p className="text-sm font-medium text-muted-foreground mb-2">
+                      What Went Wrong
+                    </p>
                     <p className="text-foreground">{trade.whatWentWrong}</p>
                   </div>
                 )}
                 {trade.lessonsLearned && (
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground mb-2">Lessons Learned</p>
+                    <p className="text-sm font-medium text-muted-foreground mb-2">
+                      Lessons Learned
+                    </p>
                     <p className="text-foreground">{trade.lessonsLearned}</p>
                   </div>
                 )}
@@ -247,11 +298,15 @@ export function TradeDetail({ trade }: TradeDetailProps) {
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <p className="text-sm text-muted-foreground mb-2">Emotion Before</p>
+                <p className="text-sm text-muted-foreground mb-2">
+                  Emotion Before
+                </p>
                 <EmotionBadge emotion={trade.emotionBefore} />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground mb-2">Confidence Before</p>
+                <p className="text-sm text-muted-foreground mb-2">
+                  Confidence Before
+                </p>
                 <div className="flex items-center gap-2">
                   <div className="flex-1 h-2 bg-secondary rounded-full overflow-hidden">
                     <div
@@ -259,33 +314,52 @@ export function TradeDetail({ trade }: TradeDetailProps) {
                       style={{ width: `${trade.confidenceBefore * 10}%` }}
                     />
                   </div>
-                  <span className="text-sm font-medium">{trade.confidenceBefore}/10</span>
+                  <span className="text-sm font-medium">
+                    {trade.confidenceBefore}/10
+                  </span>
                 </div>
               </div>
               {trade.emotionAfter && (
                 <div>
-                  <p className="text-sm text-muted-foreground mb-2">Emotion After</p>
+                  <p className="text-sm text-muted-foreground mb-2">
+                    Emotion After
+                  </p>
                   <EmotionBadge emotion={trade.emotionAfter} />
                 </div>
               )}
-              {trade.confidenceAfter !== null && trade.confidenceAfter !== undefined && (
-                <div>
-                  <p className="text-sm text-muted-foreground mb-2">Confidence After</p>
-                  <div className="flex items-center gap-2">
-                    <div className="flex-1 h-2 bg-secondary rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-primary"
-                        style={{ width: `${trade.confidenceAfter * 10}%` }}
-                      />
+              {trade.confidenceAfter !== null &&
+                trade.confidenceAfter !== undefined && (
+                  <div>
+                    <p className="text-sm text-muted-foreground mb-2">
+                      Confidence After
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <div className="flex-1 h-2 bg-secondary rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-primary"
+                          style={{ width: `${trade.confidenceAfter * 10}%` }}
+                        />
+                      </div>
+                      <span className="text-sm font-medium">
+                        {trade.confidenceAfter}/10
+                      </span>
                     </div>
-                    <span className="text-sm font-medium">{trade.confidenceAfter}/10</span>
                   </div>
-                </div>
-              )}
+                )}
               <div>
-                <p className="text-sm text-muted-foreground mb-2">Followed Plan</p>
-                <p className={trade.followedPlan ? "text-success" : "text-destructive"}>
-                  {trade.followedPlan === null ? "Not specified" : trade.followedPlan ? "Yes" : "No"}
+                <p className="text-sm text-muted-foreground mb-2">
+                  Followed Plan
+                </p>
+                <p
+                  className={
+                    trade.followedPlan ? "text-success" : "text-destructive"
+                  }
+                >
+                  {trade.followedPlan === null
+                    ? "Not specified"
+                    : trade.followedPlan
+                      ? "Yes"
+                      : "No"}
                 </p>
               </div>
             </CardContent>
@@ -323,7 +397,9 @@ export function TradeDetail({ trade }: TradeDetailProps) {
               <CardContent className="space-y-4">
                 {trade.screenshotBefore && (
                   <div>
-                    <p className="text-sm text-muted-foreground mb-2">Before Trade</p>
+                    <p className="text-sm text-muted-foreground mb-2">
+                      Before Trade
+                    </p>
                     <button
                       className="relative w-full group cursor-zoom-in"
                       onClick={() => setLightboxImage(trade.screenshotBefore!)}
@@ -341,7 +417,9 @@ export function TradeDetail({ trade }: TradeDetailProps) {
                 )}
                 {trade.screenshotAfter && (
                   <div>
-                    <p className="text-sm text-muted-foreground mb-2">After Trade</p>
+                    <p className="text-sm text-muted-foreground mb-2">
+                      After Trade
+                    </p>
                     <button
                       className="relative w-full group cursor-zoom-in"
                       onClick={() => setLightboxImage(trade.screenshotAfter!)}
